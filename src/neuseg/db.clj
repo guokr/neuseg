@@ -26,7 +26,9 @@
 (defn load-db [name]
   (with-open [rdr (clojure.java.io/reader (str "data" "/" name))]
     (map (partial reg-wd-neglect name)
-         (partition 2 (interleave (map splited-line (rest (line-seq rdr))) (iterate inc 1)))))
+         (partition 2 
+           (interleave (map splited-line (rest (line-seq rdr)))
+                       (iterate inc 1))))))
 
 (def unigram  (matrix (load-db "unigram")))
 (def bigram   (matrix (load-db "bigram")))
