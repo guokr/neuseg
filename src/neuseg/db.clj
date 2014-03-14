@@ -29,7 +29,7 @@
   (with-open [rdr (clojure.java.io/reader (str "data" "/" name))]
     (let [data  (line-seq rdr)
           declr (first data)
-          [size dim] (map #(Integer. %) (clojure.string/split line #"\s+"))
+          [size dim] (map #(Integer. %) (clojure.string/split declr #"\s+"))
           last (atom -1)
           vecmodel (new-matrix size dim)]
           (dorun
