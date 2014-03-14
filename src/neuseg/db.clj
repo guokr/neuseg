@@ -10,19 +10,14 @@
     "trigram"   (atom {})
     "quadgram"  (atom {}) })
 
-(defn- enum-splited-line [data line]
-  (let [[idx _ _] data
-        items (clojure.string/split line #"\s+")
+(defn- splited-line [line]
+  (let [items (clojure.string/split line #"\s+")
         wd    (first items)
         nvec  (normalise (vec (map #(Double. %1) (rest items))))]
-    (if-not idx
-      (tuple -1 nil nil)
-      (do
-        (if (= (mod idx 1000) 0) (println idx))
-        (tuple (+ idx 1) wd nvec)))))
+        (tuple wd nvec)))
 
 (defn- reg-wd-neglect [name data]
-  (let [[idx wd nvec] data]
+  (let [[[wd nvec] idx] data]
     (if (> idx -1)
       (do
         (swap! assoc (get registry name) wd idx)
@@ -31,7 +26,7 @@
 (defn load-db [name]
   (with-open [rdr (clojure.java.io/reader (str "data" "/" name))]
     (map (partial reg-wd-neglect name)
-         (reduce enum-splited-line [] (rest (line-seq rdr))))))
+         (partition 2 (interleave (map splited-line (rest (line-seq rdr))) (iterate inc 1)))))
 
 (def unigram  (matrix (load-db "unigram")))
 (def bigram   (matrix (load-db "bigram")))
