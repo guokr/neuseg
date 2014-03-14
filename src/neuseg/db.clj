@@ -15,16 +15,18 @@
         items (clojure.string/split line #"\s+")
         wd    (first items)
         nvec  (normalise (vec (map #(Double. %1) (rest items))))]
-    (if idx
+    (if-not idx
+      (tuple -1 nil nil)
       (do
         (if (= (mod idx 1000) 0) (println idx))
         (tuple (+ idx 1) wd nvec)))))
 
 (defn- reg-wd-neglect [name data]
   (let [[idx wd nvec] data]
-    (do
-      (swap! assoc (get registry name) wd idx)
-      nvec)))
+    (if (> idx -1)
+      (do
+        (swap! assoc (get registry name) wd idx)
+        nvec))))
 
 (defn load-db [name]
   (with-open [rdr (clojure.java.io/reader (str "data" "/" name))]
