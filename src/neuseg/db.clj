@@ -19,16 +19,18 @@
 (defn- reg-wd-neglect [name data]
   (let [[[wd nvec] idx] data]
       (do
-        (println idx wd)
-        (swap! assoc (get registry name) wd idx)
+        (if (= (mod idx 10000) 0) (print "."))
+        (swap! (get registry name) assoc wd idx)
         nvec)))
 
 (defn load-db [name]
   (with-open [rdr (clojure.java.io/reader (str "data" "/" name))]
-    (matrix (map (partial reg-wd-neglect name)
-         (partition 2 
-           (interleave (map splited-line (rest (line-seq rdr)))
-                       (iterate inc 1)))))))
+    (do
+      (println "\n" "loading" name "started!")
+      (matrix (map (partial reg-wd-neglect name)
+           (partition 2 
+             (interleave (map splited-line (rest (line-seq rdr)))
+                         (iterate inc 1))))))))
 
 (def unigram  (load-db "unigram"))
 (def bigram   (load-db "bigram"))
