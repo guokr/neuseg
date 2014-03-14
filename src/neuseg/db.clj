@@ -28,7 +28,7 @@
 (defn load-db [name]
   (with-open [rdr (clojure.java.io/reader (str "data" "/" name))]
     (map (partial reg-wd-neglect name)
-         (reduce enum-splited-line [] (line-seq rdr)))))
+         (reduce enum-splited-line [] (rest (line-seq rdr))))))
 
 (def unigram  (matrix (load-db "unigram")))
 (def bigram   (matrix (load-db "bigram")))
