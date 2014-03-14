@@ -13,11 +13,12 @@
 (defn- enum-splited-line [data line]
   (let [[idx _ _] data
         items (clojure.string/split line #"\s+")
-        chk   (println items)
         wd    (first items)
         nvec  (normalise (vec (map #(Double. %1) (rest items))))]
-    (if (= (mod idx 1000) 0) (println idx))
-    (tuple (+ idx 1) wd nvec)))
+    (if idx
+      (do
+        (if (= (mod idx 1000) 0) (println idx))
+        (tuple (+ idx 1) wd nvec)))))
 
 (defn- reg-wd-neglect [name data]
   (let [[idx wd nvec] data]
