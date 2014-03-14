@@ -32,7 +32,7 @@
         (matrix (map (partial reg-wd-neglect name)
              (partition-by #(if (number? %1) (reset! last %1) (+ @last 1))
                (interleave (map splited-line (rest (line-seq rdr)))
-                           (iterate inc 1)))))))))
+                           (iterate inc 0)))))))))
 
 (def unigram  (load-db "unigram"))
 (def bigram   (load-db "bigram"))
