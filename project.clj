@@ -15,4 +15,4 @@
                    [net.mikera/vectorz-clj "0.20.0"]
                    [junit "4.0" :scope "test"]]
   
-    :jvm-opts ["-Xmx2g"])
+    :jvm-opts ["-Xmx16g"])
