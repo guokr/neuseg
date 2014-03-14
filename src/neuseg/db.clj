@@ -19,7 +19,8 @@
 (defn- process-line [vecmodel name data]
   (let [[[wd nvec] idx] data]
       (do
-        (if (= (mod idx 1000) 0) (print "."))
+        (if (= (mod idx 1000) 0)
+          (do (print ".") (.flush System/out)))
         (swap! (get registry name) assoc wd idx)
         (set-row! vecmodel idx nvec))))
 
@@ -35,7 +36,7 @@
           (dorun
             (map (partial process-line vecmodel name)
               (partition-by #(if (number? %1) (reset! last %1) (+ @last 1))
-                (interleave (map splited-line data)
+                (interleave (map splited-line (reset data))
                             (iterate inc 0)))))
           vecmodel)))
 
