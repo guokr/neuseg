@@ -18,10 +18,10 @@
 
 (defn- reg-wd-neglect [name data]
   (let [[[wd nvec] idx] data]
-    (if (> idx -1)
       (do
+        (println idx wd)
         (swap! assoc (get registry name) wd idx)
-        nvec))))
+        nvec)))
 
 (defn load-db [name]
   (with-open [rdr (clojure.java.io/reader (str "data" "/" name))]
