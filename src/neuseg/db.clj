@@ -25,12 +25,12 @@
 
 (defn load-db [name]
   (with-open [rdr (clojure.java.io/reader (str "data" "/" name))]
-    (map (partial reg-wd-neglect name)
+    (matrix (map (partial reg-wd-neglect name)
          (partition 2 
            (interleave (map splited-line (rest (line-seq rdr)))
-                       (iterate inc 1))))))
+                       (iterate inc 1)))))))
 
-(def unigram  (matrix (load-db "unigram")))
-(def bigram   (matrix (load-db "bigram")))
-(def trigram  (matrix (load-db "trigram")))
-(def quadgram (matrix (load-db "quadgram")))
+(def unigram  (load-db "unigram"))
+(def bigram   (load-db "bigram"))
+(def trigram  (load-db "trigram"))
+(def quadgram (load-db "quadgram"))
