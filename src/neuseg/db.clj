@@ -36,7 +36,7 @@
           (dorun
             (map (partial process-line vecmodel name)
               (partition-by #(if (number? %1) (reset! last %1) (+ @last 1))
-                (interleave (map splited-line (reset data))
+                (interleave (map splited-line (rest data))
                             (iterate inc 0)))))
           vecmodel)))
 
