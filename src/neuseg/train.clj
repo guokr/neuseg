@@ -1,9 +1,9 @@
 (ns neuseg.train
   (:use [clj-tuple]
-        [clojure.core.matrix]
+        [clojure.core.matrix :only [dot]]
         [neuseg.db]
         [com.guokr.nlp.seg]
-        [clojure.string (:only join)])
+        [clojure.string :only [join]])
   (:import (com.guokr.neuseg.util NGram
                                   NeighborSlider)))
 
