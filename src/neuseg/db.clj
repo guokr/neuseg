@@ -19,8 +19,6 @@
 (defn- process-line [vecmodel name data]
   (let [[[wd nvec] idx] data]
       (do
-        (if (= (mod idx 1000) 0)
-          (do (print ".") (.flush System/out)))
         (swap! (get registry name) assoc wd idx)
         (set-row! vecmodel idx nvec))))
 

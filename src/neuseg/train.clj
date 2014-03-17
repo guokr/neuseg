@@ -1,5 +1,5 @@
-(ns neuseg.db
-  (:use [clj-tuple
-         clojure.core.matrix
-         clojure.core.matrix.operators
-         org.httpkit.server]))
+(ns neuseg.train
+  (:use [clj-tuple]
+        [clojure.core.matrix]
+        [neuseg.db]))
+
