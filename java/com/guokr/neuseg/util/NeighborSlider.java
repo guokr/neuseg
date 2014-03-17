@@ -52,17 +52,13 @@ public class NeighborSlider extends ASeq {
 
     private static RingPools rings = new RingPools();
 
-    private IPersistentMap   meta;
-
     private int              radius;
     private Obj              fill;
     private ISeq             current;
 
     private Object[]         ring;
 
-    public NeighborSlider(IPersistentMap meta, int radius, Obj fill, ISeq original) {
-        super(meta);
-        this.meta = meta;
+    public NeighborSlider(int radius, Obj fill, ISeq original) {
         this.radius = radius;
         this.fill = fill;
         this.current = original;
@@ -81,8 +77,7 @@ public class NeighborSlider extends ASeq {
         }
     }
 
-    private NeighborSlider(IPersistentMap meta, int radius, Obj fill, ISeq current, Object[] ring) {
-        super(meta);
+    private NeighborSlider(int radius, Obj fill, ISeq current, Object[] ring) {
         this.radius = radius;
         this.fill = fill;
         this.current = current;
@@ -111,7 +106,7 @@ public class NeighborSlider extends ASeq {
             }
             nextring[size - 1] = nextseq.first();
 
-            return new NeighborSlider(meta, radius, fill, nextseq, nextring);
+            return new NeighborSlider(radius, fill, nextseq, nextring);
 
         } else {
 
@@ -126,7 +121,7 @@ public class NeighborSlider extends ASeq {
                 }
                 nextring[size - 1] = fill;
 
-                return new NeighborSlider(meta, radius, fill, PersistentList.EMPTY, nextring);
+                return new NeighborSlider(radius, fill, PersistentList.EMPTY, nextring);
 
             }
 
@@ -135,7 +130,7 @@ public class NeighborSlider extends ASeq {
 
     @Override
     public Obj withMeta(IPersistentMap meta) {
-        return new NeighborSlider(meta, radius, fill, current);
+        return this;
     }
 
 }
