@@ -31,7 +31,7 @@
 
 (defn gen-case [text]
   (map format (zip (map ndot (NeighborSlider. 4 (zero-vector 16) (iter-seq (NGram/unigram text))))
-                   (map ndot (NeighborSlider. 4 (zero-vector 32) (iter-seq (NGram/bigram text))))
-                   (map ndot (NeighborSlider. 4 (zero-vector 48) (iter-seq (NGram/trigram text))))
-                   (map ndot (NeighborSlider. 4 (zero-vector 48) (iter-seq (NGram/quadgram text))))
+                   (map ndot (NeighborSlider. 4 (zero-vector 16) (iter-seq (NGram/bigram text))))
+                   (map ndot (NeighborSlider. 4 (zero-vector 16) (iter-seq (NGram/trigram text))))
+                   (map ndot (NeighborSlider. 4 (zero-vector 16) (iter-seq (NGram/quadgram text))))
                    (partition 2 (tagging text)))))
