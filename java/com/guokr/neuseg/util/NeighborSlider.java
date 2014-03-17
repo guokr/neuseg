@@ -104,9 +104,6 @@ public class NeighborSlider extends ASeq {
             }
             nextring[size - 1] = nextseq.first();
 
-            rings.claim(ring);
-            ring = null;
-
             return new NeighborSlider(radius, fill, nextseq, nextring);
 
         } else {
@@ -122,9 +119,6 @@ public class NeighborSlider extends ASeq {
                 }
                 nextring[size - 1] = fill;
 
-                rings.claim(ring);
-                ring = null;
-
                 return new NeighborSlider(radius, fill, PersistentList.EMPTY, nextring);
 
             }
@@ -135,6 +129,11 @@ public class NeighborSlider extends ASeq {
     @Override
     public Obj withMeta(IPersistentMap meta) {
         return this;
+    }
+
+    public void finalize() {
+        rings.claim(ring);
+        ring = null;
     }
 
 }
