@@ -14,7 +14,7 @@
 (defn- zip [& colls]
   (map flatten (partition (count colls) (apply interleave colls))))
 
-(defn- tformat [coll]
+(defn- format-case [coll]
   (clojure.string/join "\n" (map (partial clojure.string/join " ") (split-at 32 coll))))
 
 (defn tagging [text]
@@ -27,10 +27,10 @@
           (recur (rest raw) (rest sgd) (conj ret -1 -1))
           (recur (rest raw) (nthrest sgd 2) (conj ret 1 1)))))))
 
-(defn gen-case [text]
+(defn gen-cases [text]
   (clojure.string/join "\n" 
-    (map tformat (zip (map ndot (NeighborSlider. 4 (get-vector " ") (map get-vector (iterator-seq (NGram/unigram text)))))
-                      (map ndot (NeighborSlider. 4 (get-vector "  ") (map get-vector (iterator-seq (NGram/bigram text)))))
-                      (map ndot (NeighborSlider. 4 (get-vector "   ") (map get-vector (iterator-seq (NGram/trigram text)))))
-                      (map ndot (NeighborSlider. 4 (get-vector "    ") (map get-vector (iterator-seq (NGram/quadgram text))))))
-                      (partition 2 (tagging text)))))
+    (map format-case (zip (map ndot (NeighborSlider. 4 (get-vector " ") (map get-vector (iterator-seq (NGram/unigram text)))))
+                          (map ndot (NeighborSlider. 4 (get-vector "  ") (map get-vector (iterator-seq (NGram/bigram text)))))
+                          (map ndot (NeighborSlider. 4 (get-vector "   ") (map get-vector (iterator-seq (NGram/trigram text)))))
+                          (map ndot (NeighborSlider. 4 (get-vector "    ") (map get-vector (iterator-seq (NGram/quadgram text))))))
+                          (partition 2 (tagging text)))))
