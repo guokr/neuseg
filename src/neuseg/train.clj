@@ -4,8 +4,8 @@
         [neuseg.db]
         [com.guokr.nlp.seg]
         [clojure.string (:only join)])
-  (:import [com.guokr.neuseg.util.NGram]
-           [com.guokr.neuseg.util.NeighborSlider]))
+  (:import (com.guokr.neuseg.util NGram
+                                  NeighborSlider)))
 
 (defn ndot [vecs n]
   (let [mid (/ (dec n) 2)
