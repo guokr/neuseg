@@ -63,10 +63,11 @@
     (if idx (get-row ngram idx) (zero-vector dim))))
 
 (defn get-vector [s]
-  (case (.length s)
-    1 (retrieve-vector "unigram" s)
-    2 (retrieve-vector "bigram" s)
-    3 (retrieve-vector "trigram" s)
-    4 (retrieve-vector "quadgram" s)
-    (zero-vector 0)))
+  (let [wd (.toString s)]
+    (case (.length s)
+      1 (retrieve-vector "unigram" wd)
+      2 (retrieve-vector "bigram" wd)
+      3 (retrieve-vector "trigram" wd)
+      4 (retrieve-vector "quadgram" wd)
+      (zero-vector 0))))
 
