@@ -108,7 +108,7 @@ public class NeighborSlider extends ASeq {
 
         } else {
 
-            if (nextring[radius + 1].equals(fill)) {
+            if (ring[radius + 1].equals(fill)) {
 
                 return PersistentList.EMPTY;
 
