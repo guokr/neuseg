@@ -69,7 +69,7 @@ public class NeighborSlider extends ASeq {
         }
 
         ISeq next = original == null ? PersistentList.EMPTY : original;
-        for (int i = 0; i < radius + 1; i++) {
+        for (int i = radius; i < 2 * radius + 1; i++) {
             Object head = next.first();
             this.ring[i] = head == null ? fill : head;
             next = next.next();
