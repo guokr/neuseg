@@ -14,5 +14,6 @@
                    [net.mikera/core.matrix "0.20.0"]
                    [net.mikera/vectorz-clj "0.20.0"]
                    [junit "4.0" :scope "test"]]
-  
+
+    :java-source-paths ["java"]
     :jvm-opts ["-Xmx16g"])
