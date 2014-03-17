@@ -17,7 +17,7 @@
 
 (defn- tformat [coll]
   (let [row (flatten coll)]
-    (str (join " " (take 32 row) "\n" (join " " (nthrest 32 row)) "\n"))))
+    (str (join " " (take 32 row) "\n" (join " " (nthrest row 32)) "\n"))))
 
 (defn tagging [text]
   (let [seged (seg text)]
