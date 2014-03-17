@@ -97,7 +97,7 @@ public class NeighborSlider extends ASeq {
         Object[] nextring = rings.lease(radius);
 
         int size = 2 * radius + 1;
-        if (!nextseq.equals(nextseq.empty())) {
+        if (nextseq != null && !nextseq.equals(PersistentList.EMPTY)) {
 
             for (int i = 0; i < size - 1; i++) {
                 nextring[i] = ring[i + 1];
