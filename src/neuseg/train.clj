@@ -7,8 +7,8 @@
   (:import (com.guokr.neuseg.util NGram
                                   NeighborSlider)))
 
-(defn- ndot [vecs n]
-  (let [mid (/ (dec n) 2)
+(defn- ndot [vecs]
+  (let [mid 4
         mid-vec (nth vecs mid)]
     (map (partial dot mid-vec) (concat (take mid vecs) (drop (inc mid) vecs)))))
 
