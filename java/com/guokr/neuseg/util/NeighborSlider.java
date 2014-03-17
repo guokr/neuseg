@@ -53,12 +53,12 @@ public class NeighborSlider extends ASeq {
     private static RingPools rings = new RingPools();
 
     private int              radius;
-    private Obj              fill;
+    private Object              fill;
     private ISeq             current;
 
     private Object[]         ring;
 
-    public NeighborSlider(int radius, Obj fill, ISeq original) {
+    public NeighborSlider(int radius, Object fill, ISeq original) {
         this.radius = radius;
         this.fill = fill;
         this.current = original;
@@ -77,7 +77,7 @@ public class NeighborSlider extends ASeq {
         }
     }
 
-    private NeighborSlider(int radius, Obj fill, ISeq current, Object[] ring) {
+    private NeighborSlider(int radius, Object fill, ISeq current, Object[] ring) {
         this.radius = radius;
         this.fill = fill;
         this.current = current;
