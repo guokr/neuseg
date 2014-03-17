@@ -1,4 +1,4 @@
-package com.guokr.neuseg.ngram;
+package com.guokr.neuseg.util;
 
 import java.util.Iterator;
 

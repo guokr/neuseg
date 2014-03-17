@@ -13,6 +13,7 @@
                    [log4j/log4j "1.2.17"]
                    [net.mikera/core.matrix "0.20.0"]
                    [net.mikera/vectorz-clj "0.20.0"]
+                   [com.googlecode.fannj/fannj "0.6"]
                    [junit "4.0" :scope "test"]]
 
     :java-source-paths ["java"]
