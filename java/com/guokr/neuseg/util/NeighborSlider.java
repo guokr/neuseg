@@ -34,23 +34,23 @@ public class NeighborSlider extends ASeq {
         }
 
         public synchronized Object[] lease(int radius) {
-            int size = 2 * radius + 1;
-            Queue<Object[]> pool = pools.get(size);
+            int ringsize = 2 * radius + 1;
+            Queue<Object[]> pool = pools.get(ringsize);
             if (pool == null) {
                 pool = new LinkedBlockingQueue<Object[]>();
-                pools.put(size, pool);
+                pools.put(ringsize, pool);
             }
 
             if (pool.size() > 0) {
                 return pool.poll();
             } else {
-                return new Object[size];
+                return new Object[ringsize];
             }
         }
 
     }
 
-    private static RingPools rings = new RingPools();
+    private static RingPools RINGS = new RingPools();
 
     private int              radius;
     private Object           fill;
@@ -63,7 +63,7 @@ public class NeighborSlider extends ASeq {
         this.fill = fill;
         this.current = original;
 
-        this.ring = rings.lease(radius);
+        this.ring = RINGS.lease(radius);
         for (int i = 0; i < radius; i++) {
             this.ring[i] = fill;
         }
@@ -94,15 +94,15 @@ public class NeighborSlider extends ASeq {
     public ISeq next() {
         ISeq nextseq = current.next();
 
-        Object[] nextring = rings.lease(radius);
+        int ringsize = 2 * radius + 1;
+        Object[] nextring = RINGS.lease(radius);
 
-        int size = 2 * radius + 1;
         if (nextseq != null && !nextseq.equals(PersistentList.EMPTY)) {
 
-            for (int i = 0; i < size - 1; i++) {
+            for (int i = 0; i < ringsize - 1; i++) {
                 nextring[i] = ring[i + 1];
             }
-            nextring[size - 1] = nextseq.first();
+            nextring[ringsize - 1] = nextseq.first();
 
             return new NeighborSlider(radius, fill, nextseq, nextring);
 
@@ -114,10 +114,10 @@ public class NeighborSlider extends ASeq {
 
             } else {
 
-                for (int i = 0; i < size; i++) {
+                for (int i = 0; i < ringsize - 1; i++) {
                     nextring[i] = ring[i + 1];
                 }
-                nextring[size - 1] = fill;
+                nextring[ringsize - 1] = fill;
 
                 return new NeighborSlider(radius, fill, PersistentList.EMPTY, nextring);
 
@@ -132,7 +132,7 @@ public class NeighborSlider extends ASeq {
     }
 
     public void finalize() {
-        rings.claim(ring);
+        RINGS.claim(ring);
         ring = null;
     }
 
