@@ -1,6 +1,7 @@
 (ns neuseg.db
   (:use [clj-tuple]
-        [clojure.core.matrix :only [new-matrix set-row!]]))
+        [clojure.core.matrix :only [set-current-implementation
+                                    new-matrix set-row!]]))
 
 (set-current-implementation :vectorz)
 
