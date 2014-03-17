@@ -53,7 +53,7 @@ public class NeighborSlider extends ASeq {
     private static RingPools rings = new RingPools();
 
     private int              radius;
-    private Object              fill;
+    private Object           fill;
     private ISeq             current;
 
     private Object[]         ring;
@@ -87,8 +87,6 @@ public class NeighborSlider extends ASeq {
     @Override
     public Object first() {
         Object list = PersistentList.create(Arrays.asList(ring));
-        rings.claim(ring);
-        ring = null;
         return list;
     }
 
@@ -106,6 +104,9 @@ public class NeighborSlider extends ASeq {
             }
             nextring[size - 1] = nextseq.first();
 
+            rings.claim(ring);
+            ring = null;
+
             return new NeighborSlider(radius, fill, nextseq, nextring);
 
         } else {
@@ -120,6 +121,9 @@ public class NeighborSlider extends ASeq {
                     nextring[i] = ring[i + 1];
                 }
                 nextring[size - 1] = fill;
+
+                rings.claim(ring);
+                ring = null;
 
                 return new NeighborSlider(radius, fill, PersistentList.EMPTY, nextring);
 
