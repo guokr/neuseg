@@ -42,4 +42,6 @@
         (.write wrtr (str (count text) " 32 2\n"))
         (.write wrtr (gen-cases text))))))
 
+(defn prepare []
+  (gen-train "data/corpus/corpus" "data/trains/train"))
 
