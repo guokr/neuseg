@@ -1,5 +1,6 @@
 (ns neuseg.train
   (:use [clj-tuple]
+        [clojure.java.io]
         [clojure.core.matrix :only [dot zero-vector]]
         [neuseg.db]
         [com.guokr.nlp.seg])
