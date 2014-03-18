@@ -37,12 +37,13 @@
                           (partition 2 (tagging text)))))
 
 (defn gen-train [file-corpus file-output]
-  (with-open [wrtr (writer file-output {:encoding "utf-8"})]
-    (with-open [rdr (reader file-corpus {:encoding "utf-8"})]
+  (with-open [wrtr (writer file-output  :encoding "utf-8")]
+    (with-open [rdr (reader file-corpus :encoding "utf-8")]
       (let [text (clojure.string/join "" (line-seq rdr))]
         (.write wrtr (str (count text) " 32 2\n"))
         (.write wrtr (gen-cases text))))))
 
 (defn prepare []
-  (gen-train "data/corpus/corpus" "data/trains/train"))
+  (gen-train "data/corpus/corpus" "data/trains/train")
+  (gen-train "data/corpus/tests" "data/trains/tests"))
 
