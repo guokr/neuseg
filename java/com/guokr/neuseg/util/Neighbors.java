@@ -12,7 +12,11 @@ import clojure.lang.ISeq;
 import clojure.lang.Obj;
 import clojure.lang.PersistentList;
 
-public class NeighborSlider extends ASeq {
+public class Neighbors extends ASeq {
+    
+    public static Neighbors slider(int radius, Object fill, ISeq original) {
+        return new Neighbors(radius, fill, original);
+    }
 
     private static final long serialVersionUID = 2828087430289126339L;
 
@@ -58,7 +62,7 @@ public class NeighborSlider extends ASeq {
 
     private Object[]         ring;
 
-    public NeighborSlider(int radius, Object fill, ISeq original) {
+    public Neighbors(int radius, Object fill, ISeq original) {
         this.radius = radius;
         this.fill = fill;
         this.current = original;
@@ -77,7 +81,7 @@ public class NeighborSlider extends ASeq {
         }
     }
 
-    private NeighborSlider(int radius, Object fill, ISeq current, Object[] ring) {
+    private Neighbors(int radius, Object fill, ISeq current, Object[] ring) {
         this.radius = radius;
         this.fill = fill;
         this.current = current;
@@ -104,7 +108,7 @@ public class NeighborSlider extends ASeq {
             }
             nextring[ringsize - 1] = nextseq.first();
 
-            return new NeighborSlider(radius, fill, nextseq, nextring);
+            return new Neighbors(radius, fill, nextseq, nextring);
 
         } else {
 
@@ -119,7 +123,7 @@ public class NeighborSlider extends ASeq {
                 }
                 nextring[ringsize - 1] = fill;
 
-                return new NeighborSlider(radius, fill, PersistentList.EMPTY, nextring);
+                return new Neighbors(radius, fill, PersistentList.EMPTY, nextring);
 
             }
 

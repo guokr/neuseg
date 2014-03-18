@@ -71,3 +71,8 @@
       4 (retrieve-vector "quadgram" wd)
       (zero-vector 0))))
 
+(def unizero  (get-vector " "))
+(def bizero   (get-vector "  "))
+(def trizero  (get-vector "   "))
+(def quadzero (get-vector "    "))
+

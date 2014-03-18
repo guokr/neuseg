@@ -4,9 +4,9 @@
         [neuseg.db]
         [com.guokr.nlp.seg])
   (:import (com.guokr.neuseg.util NGram
-                                  NeighborSlider)))
+                                  Neighbors)))
 
-(defn- ndot [vecs]
+(defn- mdot [vecs]
   (let [mid 4
         mid-vec (nth vecs mid)]
     (map (partial dot mid-vec) (concat (take mid vecs) (drop (inc mid) vecs)))))
@@ -29,8 +29,8 @@
 
 (defn gen-cases [text]
   (clojure.string/join "\n" 
-    (map format-case (zip (map ndot (NeighborSlider. 4 (get-vector " ") (map get-vector (iterator-seq (NGram/unigram text)))))
-                          (map ndot (NeighborSlider. 4 (get-vector "  ") (map get-vector (iterator-seq (NGram/bigram text)))))
-                          (map ndot (NeighborSlider. 4 (get-vector "   ") (map get-vector (iterator-seq (NGram/trigram text)))))
-                          (map ndot (NeighborSlider. 4 (get-vector "    ") (map get-vector (iterator-seq (NGram/quadgram text))))))
+    (map format-case (zip (map mdot (vec (Neighbors/slider 4 unizero  (map get-vector (iterator-seq (NGram/unigram text))))))
+                          (map mdot (vec (Neighbors/slider 4 bizero   (map get-vector (iterator-seq (NGram/bigram text))))))
+                          (map mdot (vec (Neighbors/slider 4 trizero  (map get-vector (iterator-seq (NGram/trigram text))))))
+                          (map mdot (vec (Neighbors/slider 4 quadzero (map get-vector (iterator-seq (NGram/quadgram text)))))))
                           (partition 2 (tagging text)))))
