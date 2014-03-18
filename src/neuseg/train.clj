@@ -29,8 +29,17 @@
 
 (defn gen-cases [text]
   (clojure.string/join "\n" 
-    (map format-case (zip (map mdot (vec (Neighbors/slider 4 unizero  (map get-vector (iterator-seq (NGram/unigram text))))))
-                          (map mdot (vec (Neighbors/slider 4 bizero   (map get-vector (iterator-seq (NGram/bigram text))))))
-                          (map mdot (vec (Neighbors/slider 4 trizero  (map get-vector (iterator-seq (NGram/trigram text))))))
-                          (map mdot (vec (Neighbors/slider 4 quadzero (map get-vector (iterator-seq (NGram/quadgram text)))))))
+    (map format-case (zip (map mdot (Neighbors/slider 4 unizero  (map get-vector (iterator-seq (NGram/unigram text)))))
+                          (map mdot (Neighbors/slider 4 bizero   (map get-vector (iterator-seq (NGram/bigram text)))))
+                          (map mdot (Neighbors/slider 4 trizero  (map get-vector (iterator-seq (NGram/trigram text)))))
+                          (map mdot (Neighbors/slider 4 quadzero (map get-vector (iterator-seq (NGram/quadgram text))))))
                           (partition 2 (tagging text)))))
+
+(defn gen-train [file-corpus file-output]
+  (with-open [wrtr (writer file-output {:encoding "utf-8"})]
+    (with-open [rdr (reader file-corpus {:encoding "utf-8"})]
+      (let [text (clojure.string/join "" (line-seq rdr))]
+        (.write wrtr (str (count text) " 32 2\n"))
+        (.write wrtr (gen-cases text))))))
+
+
