@@ -43,23 +43,23 @@
 
 (def activiation-function-map {
 	:linear 0
-  :threshold 2
-  :threshold-symmetric 3
-  :sigmoid 4
-  :sigmoid-stepwise 5
-  :sigmoid-symmetric 6
-  :sigmoid-symmetric-stepwise 7
-  :gaussian 8
-  :gaussian-symmetric 9
-  :gaussian-stepwise 10
-  :elliot 11
-  :elliot-symmetric 12
-  :linear-piece 13
-  :linear-piece-symmetric 14
-  :sin-symmetric 15
-  :cos-symmetric 16
-  :sin 17
-  :cos 18 })
+  :threshold 1
+  :threshold-symmetric 2
+  :sigmoid 3
+  :sigmoid-stepwise 4
+  :sigmoid-symmetric 5
+  :sigmoid-symmetric-stepwise 6
+  :gaussian 7
+  :gaussian-symmetric 8
+  :gaussian-stepwise 9
+  :elliot 10
+  :elliot-symmetric 11
+  :linear-piece 12
+  :linear-piece-symmetric 13
+  :sin-symmetric 14
+  :cos-symmetric 15
+  :sin 16
+  :cos 17 })
 
 ;; apis
 
