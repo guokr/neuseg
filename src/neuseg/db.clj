@@ -32,7 +32,7 @@
 
 (defn load-db [name]
   (println "loading" name "started......")
-  (with-open [rdr (clojure.java.io/reader (str "data/models/" name))]
+  (with-open [rdr (clojure.java.io/reader (str "data/models/" name ".vec"))]
     (let [data  (line-seq rdr)
           declr (first data)
           [size dim] (map #(Integer. %) (clojure.string/split declr #"\s+"))
