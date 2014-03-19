@@ -6,31 +6,31 @@
 
 (System/setProperty "jna.library.path" "/usr/local/lib")
 
-(def *create-standard*
+(def ^:private create-standard
   (jna/to-fn Pointer fann/fann_create_standard))
 
-(def *set-activiation-hidden*
+(def ^:private set-activiation-hidden
   (jna/to-fn Integer fann/fann_set_activation_function_hidden))
 
-(def *set-activiation-output*
+(def ^:private set-activiation-output
   (jna/to-fn Integer fann/fann_set_activation_function_output))
 
-(def *train-on-data*
+(def ^:private train-on-data
   (jna/to-fn Integer fann/fann_train_on_data))
 
-(def *test-data*
-  (jna/to-fn Flaot fann/fann_test_data))
+(def ^:private test-data
+  (jna/to-fn Float fann/fann_test_data))
 
-(def *save*
+(def ^:private save
   (jna/to-fn Integer fann/fann_save))
 
-(def *destroy*
+(def ^:private destroy
   (jna/to-fn Integer fann/fann_destroy))
 
-(def *read-train-from-file*
+(def ^:private read-train-from-file
   (jna/to-fn Pointer fann/fann_read_train_from_file))
 
-(def *destroy-train*
+(def ^:private destroy-train
   (jna/to-fn Integer fann/fann_destroy_train))
 
 ;; constants
@@ -59,21 +59,21 @@
 
 (defn create [layers & opts]
   (let [params (cons (count layers) layers)
-        fann   (apply *create-standard* params)]
+        fann   (apply create-standard params)]
     (if-let [hidden (:hidden opt)]
-      (*set-activiation-hidden* fann (get activiation-function-map hidden)))
+      (set-activiation-hidden fann (get activiation-function-map hidden)))
     (if-let [output (:output opt)]
-      (*set-activiation-output* fann (get activiation-function-map output)))
+      (set-activiation-output fann (get activiation-function-map output)))
     fann))
 
 (defn load-train-data [train-file-name]
-    (*read-train-from-file* train-file-name))
+    (read-train-from-file train-file-name))
 
 (defn train [fann train-data max-epochs epochs-between-reports desired-error]
-  (*train-on-data* fann train-data max-epochs epochs-between-reports desired-error))
+  (train-on-data fann train-data max-epochs epochs-between-reports desired-error))
 
 (defn test [fann train-data]
-  (*test-data* fann train-data))
+  (test-data fann train-data))
 
 
 
