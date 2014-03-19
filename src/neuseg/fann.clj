@@ -9,6 +9,9 @@
 (def ^:private -create-standard
   (jna/to-fn Pointer fann/fann_create_standard))
 
+(def ^:private -create-from-file
+  (jna/to-fn Pointer fann/fann_create_from_file))
+
 (def ^:private -set-activiation-hidden
   (jna/to-fn Integer fann/fann_set_activation_function_hidden))
 
@@ -23,6 +26,9 @@
 
 (def ^:private -save
   (jna/to-fn Integer fann/fann_save))
+
+(def ^:private -run
+  (jna/to-fn Integer fann/fann_run))
 
 (def ^:private -destroy
   (jna/to-fn Integer fann/fann_destroy))
@@ -57,6 +63,9 @@
 
 ;; apis
 
+(defn load [file-name]
+  (-create-from-file file-name))
+
 (defn create [layers & opts]
   (let [params (cons (count layers) layers)
         fann   (apply -create-standard params)]
@@ -84,5 +93,7 @@
 (defn destroy [fann]
   (-destroy fann))
 
+(defn run [fann input]
+  (-run fann input))
 
 
