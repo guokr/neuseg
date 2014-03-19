@@ -40,12 +40,18 @@
                           (map mdot (Neighbors/slider 4 quadzero (map get-vector (iterator-seq (NGram/quadgram text))))))
                           (partition 2 (tagging text)))))
 
+(def counter (atom 0))
+
 (defn gen-train [file-corpus file-output]
-  (with-open [wrtr (writer file-output  :encoding "utf-8")]
-    (with-open [rdr (reader file-corpus :encoding "utf-8")]
-      (let [text (clojure.string/join "" (line-seq rdr))]
-        (.write wrtr (str (count text) " 32 2\n"))
-        (.write wrtr (gen-cases text))))))
+  (let [baos (java.io.ByteArrayOutputStream.)]
+    (with-open [wrtr (writer baos :encoding "utf-8")]
+      (with-open [rdr (reader file-corpus :encoding "utf-8")]
+        (doseq [line (line-seq rdr)]
+          (swap! counter add (count line))
+          (.write wrtr (gen-cases text)))))
+    (with-open [wrtr (writer file-output  :encoding "utf-8")]
+        (.write wrtr (str @counter " 32 2\n"))
+          (.write wrtr (toString baos "utf-8"))))))
 
 (defn prepare []
   (gen-train "data/corpus/corpus" "data/trains/train")
