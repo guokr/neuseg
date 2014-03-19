@@ -28,7 +28,7 @@
   (jna/to-fn Integer fann/fann_save))
 
 (def ^:private -run
-  (jna/to-fn Integer fann/fann_run))
+  (jna/to-fn Pointer fann/fann_run))
 
 (def ^:private -destroy
   (jna/to-fn Integer fann/fann_destroy))
@@ -94,6 +94,6 @@
   (-destroy fann))
 
 (defn run [fann input]
-  (-run fann input))
+  (vec (.getFloatArray (-run fann (float-array input)) 0 2)))
 
 
