@@ -2,7 +2,7 @@
   (:import (com.googlecode.fannj Fann
                                  Layer
                                  Trainer
-                                 ActivationFunction))
+                                 ActivationFunction)))
 
 (defn train []
   (let [inputLayer  (Layer/create 32 ActivationFunction/FANN_SIGMOID_SYMMETRIC)
