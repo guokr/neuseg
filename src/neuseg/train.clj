@@ -13,5 +13,4 @@
     (println "training...")
     (.train trainer "data/trains/train" 500000 1000 0.001)
     (println "testing...")
-    (println "error = " (.test trainer "data/trains/tests") )
-  )
+    (println "error = " (.test trainer "data/trains/tests"))))
