@@ -60,9 +60,9 @@
 (defn create [layers & opts]
   (let [params (cons (count layers) layers)
         fann   (apply create-standard params)]
-    (if-let [hidden (:hidden opt)]
+    (if-let [hidden (:hidden opts)]
       (set-activiation-hidden fann (get activiation-function-map hidden)))
-    (if-let [output (:output opt)]
+    (if-let [output (:output opts)]
       (set-activiation-output fann (get activiation-function-map output)))
     fann))
 
