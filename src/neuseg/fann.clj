@@ -63,7 +63,7 @@
 
 ;; apis
 
-(defn load [file-name]
+(defn loadnn [file-name]
   (-create-from-file file-name))
 
 (defn create [layers & opts]
