@@ -45,10 +45,10 @@
 	:linear 0
   :threshold 1
   :threshold-symmetric 2
-  :sigmod 3
-  :sigmod-stepwise 4
-  :sigmod-symmetric 5
-  :sigmod-symmetric-stepwise 6
+  :sigmoid 3
+  :sigmoid-stepwise 4
+  :sigmoid-symmetric 5
+  :sigmoid-symmetric-stepwise 6
   :gaussian 7
   :gaussian-symmetric 8
   :gaussian-stepwise 9
