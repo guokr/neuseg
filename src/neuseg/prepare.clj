@@ -5,11 +5,7 @@
         [neuseg.db]
         [com.guokr.nlp.seg])
   (:import (com.guokr.neuseg.util NGram
-                                  Neighbors)
-           (com.googlecode.fannj Fann
-                                 Layer
-                                 Trainer
-                                 ActivationFunction)))
+                                  Neighbors)))
 
 (defn- mdot [vecs]
   (let [mid 4
