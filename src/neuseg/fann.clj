@@ -72,7 +72,7 @@
 (defn train [fann train-data max-epochs epochs-between-reports desired-error]
   (train-on-data fann train-data max-epochs epochs-between-reports desired-error))
 
-(defn test [fann train-data]
+(defn test-fann [fann train-data]
   (test-data fann train-data))
 
 
