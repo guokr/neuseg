@@ -9,4 +9,4 @@
     (fann/train nn train-data 100 1 0.01)
     (println "testing...")
     (println "error = " (fann/testnn nn test-data))
-    (fann/save fann "data/models/tagging.nn")))
+    (fann/save nn "data/models/tagging.nn")))
