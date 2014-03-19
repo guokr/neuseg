@@ -1,16 +1,11 @@
 (ns neuseg.train
-  (:import (com.googlecode.fannj Fann
-                                 Layer
-                                 Trainer
-                                 ActivationFunction)))
+  (:require [neuseg.fann :as fann]))
 
 (defn train []
-  (let [inputLayer  (Layer/create 32 ActivationFunction/FANN_SIGMOID_SYMMETRIC)
-        hiddenLayer (Layer/create 32 ActivationFunction/FANN_SIGMOID_SYMMETRIC)
-        outLayer    (Layer/create 2 ActivationFunction/FANN_SIGMOID_SYMMETRIC)
-        fann        (Fann. [inputLayer hiddenLayer outLayer])
-        trainer     (Trainer. fann)]
+  (let [nn         (fann/create [32 32 2] :hidden :sigmod-symmetric :output :sigmod-symmetric)
+        train-data (fann/load-train-data "data/trains/train")
+        test-data  (fann/load-train-data "data/trains/test")]
     (println "training...")
-    (.train trainer "data/trains/train" 500000 1000 0.001)
+    (fann/train nn train-data 500000 1000 0.001)
     (println "testing...")
-    (println "error = " (.test trainer "data/trains/tests"))))
+    (println "error = " (fann/test nn test-data))))

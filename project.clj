@@ -13,7 +13,7 @@
                    [log4j/log4j "1.2.17"]
                    [net.mikera/core.matrix "0.20.0"]
                    [net.mikera/vectorz-clj "0.20.0"]
-                   [com.googlecode.fannj/fannj "0.6"]
+                   [net.n01se/clojure-jna "1.0.0"]
                    [com.guokr/clj-cn-nlp "0.2.0"]
                    [junit "4.0" :scope "test"]]
 
