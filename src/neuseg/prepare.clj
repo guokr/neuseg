@@ -47,7 +47,7 @@
           (.write wrtr (gen-cases line)))))
     (with-open [wrtr (writer file-output  :encoding "utf-8")]
         (.write wrtr (str @counter " 32 2\n"))
-          (.write wrtr (toString baos "utf-8")))))
+          (.write wrtr (.toString baos "utf-8")))))
 
 (defn prepare []
   (gen-train "data/corpus/corpus" "data/trains/train")
