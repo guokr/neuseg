@@ -32,7 +32,7 @@
           (recur (rest raw) (nthrest sgd 2) (conj ret 1 1)))))))
 
 (defn neighbors [radius elem-fill coll]
-  (let [window (+ 1 (* 2 redius))
+  (let [window (+ 1 (* 2 radius))
         head   (repeat radius elem-fill)
         tail   (repeat radius elem-fill)
         filled (concat head coll tail)]
