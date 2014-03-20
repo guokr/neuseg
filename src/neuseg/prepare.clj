@@ -36,8 +36,8 @@
   (let [window (+ 1 (* 2 radius))
         head   (repeat radius elem-fill)
         tail   (repeat radius elem-fill)
-        filled (concat head coll tail)]
-    (partition filled window 1)))
+        merged (concat head coll tail)]
+    (partition window 1 merged)))
 
 (defn gen-cases [text]
   (clojure.string/join "\n" 
