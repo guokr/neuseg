@@ -32,7 +32,7 @@
       (if (nil? (second raw)) (conj ret 1)
         (if (= (second raw) (second sgd))
           (if (= (second raw) " ")
-            (recur (nthrest raw 2) (nthrest sgd 2) (conj ret 1 1))
+            (recur (nthrest raw 2) (nthrest sgd 2) (conj ret 1 1 1 1))
             (recur (rest raw) (rest sgd) (conj ret -1 -1)))
           (recur (rest raw) (nthrest sgd 2) (conj ret 1 1)))))))
 
