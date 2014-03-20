@@ -21,9 +21,6 @@
 (defn- clean [text]
   (clojure.string/replace text #"(\s|\u00a0)+" " "))
 
-(defn- trim [text]
-   (clojure.string/replace text #"(\s|\u00a0)+" ""))
-
 (defn tagging [text]
   (let [seged (seg text)]
     (loop [raw text
@@ -51,8 +48,9 @@
     (with-open [wrtr (writer baos :encoding "utf-8")]
       (with-open [rdr (reader file-corpus :encoding "utf-8")]
         (doseq [line (line-seq rdr)]
-          (swap! counter + (count (trim line)))
-          (.write wrtr (gen-cases (clean line))))))
+          (let [cline (clean line)]
+            (swap! counter + (count cline))
+            (.write wrtr (gen-cases cline))))))
     (with-open [wrtr (writer file-output  :encoding "utf-8")]
         (.write wrtr (str @counter " 32 2\n"))
           (.write wrtr (.toString baos "utf-8")))))
