@@ -3,9 +3,7 @@
         [clojure.java.io]
         [clojure.core.matrix :only [dot zero-vector]]
         [neuseg.db]
-        [com.guokr.nlp.seg])
-  (:import (com.guokr.neuseg.util NGram
-                                  Neighbors)))
+        [com.guokr.nlp.seg]))
 
 (defn- mdot [vecs]
   (let [mid 4
@@ -33,12 +31,19 @@
             (recur (rest raw) (rest sgd) (conj ret -1 -1)))
           (recur (rest raw) (nthrest sgd 2) (conj ret 1 1)))))))
 
+(defn neighbors [radius elem-fill coll]
+  (let [window (+ 1 (* 2 redius))
+        head   (repeat radius elem-fill)
+        tail   (repeat radius elem-fill)
+        filled (concat head coll tail)]
+    (partition filled window 1)))
+
 (defn gen-cases [text]
   (clojure.string/join "\n" 
-    (map format-case (zip (map mdot (Neighbors/slider 4 unizero  (map get-vector (iterator-seq (NGram/unigram text)))))
-                          (map mdot (Neighbors/slider 4 bizero   (map get-vector (iterator-seq (NGram/bigram text)))))
-                          (map mdot (Neighbors/slider 4 trizero  (map get-vector (iterator-seq (NGram/trigram text)))))
-                          (map mdot (Neighbors/slider 4 quadzero (map get-vector (iterator-seq (NGram/quadgram text))))))
+    (map format-case (zip (map mdot (neighbors 4 unizero  (map get-vector (iterator-seq (NGram/unigram text)))))
+                          (map mdot (neighbors 4 bizero   (map get-vector (iterator-seq (NGram/bigram text)))))
+                          (map mdot (neighbors 4 trizero  (map get-vector (iterator-seq (NGram/trigram text)))))
+                          (map mdot (neighbors 4 quadzero (map get-vector (iterator-seq (NGram/quadgram text))))))
                           (partition 2 (tagging text)))))
 
 (def counter (atom 0))
