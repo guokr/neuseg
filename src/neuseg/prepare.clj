@@ -44,7 +44,7 @@
       (with-open [rdr (reader file-corpus :encoding "utf-8")]
         (doseq [line (line-seq rdr)]
           (swap! counter + (count line))
-          (.write wrtr (gen-cases text)))))
+          (.write wrtr (gen-cases line)))))
     (with-open [wrtr (writer file-output  :encoding "utf-8")]
         (.write wrtr (str @counter " 32 2\n"))
           (.write wrtr (toString baos "utf-8")))))
