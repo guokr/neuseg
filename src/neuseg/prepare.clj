@@ -3,7 +3,8 @@
         [clojure.java.io]
         [clojure.core.matrix :only [dot zero-vector]]
         [neuseg.db]
-        [com.guokr.nlp.seg]))
+        [com.guokr.nlp.seg])
+  (:import [com.guokr.neuseg.util NGram]))
 
 (defn- mdot [vecs]
   (let [mid 4
