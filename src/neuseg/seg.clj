@@ -16,4 +16,4 @@
       (str ch))))
 
 (defn seg [text]
-  (map untagging (zip (map tagging (vectorize text)) (vec text)))
+  (map untagging (zip (map tagging (vectorize text)) (vec text))))
