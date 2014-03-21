@@ -6,14 +6,6 @@
         [com.guokr.nlp.seg])
   (:import [com.guokr.neuseg.util NGram]))
 
-(defn- mdot [vecs]
-  (let [mid 4
-        mid-vec (nth vecs mid)]
-    (map (partial dot mid-vec) (concat (take mid vecs) (drop (inc mid) vecs)))))
-
-(defn- zip [& colls]
-  (map flatten (partition (count colls) (apply interleave colls))))
-
 (defn- format-case [input output]
   (clojure.string/join "\n" (map (partial clojure.string/join " ") [input output])))
 
@@ -32,13 +24,6 @@
             (recur (rest raw) (rest sgd) (conj ret -1 -1)))
           (recur (rest raw) (nthrest sgd 2) (conj ret 1 1)))))))
 
-(defn neighbors [radius elem-fill coll]
-  (let [window (+ 1 (* 2 radius))
-        head   (repeat radius elem-fill)
-        tail   (repeat radius elem-fill)
-        merged (concat head coll tail)]
-    (partition window 1 merged)))
-
 (defn gen-cases [text]
   (clojure.string/join "\n" 
     (map format-case (zip (map mdot (neighbors 4 unizero  (map get-vector (iterator-seq (NGram/unigram text)))))
@@ -50,6 +35,7 @@
 (def counter (atom 0))
 
 (defn gen-train [file-corpus file-output]
+  (reset! counter 0)
   (let [baos (java.io.ByteArrayOutputStream.)]
     (with-open [wrtr (writer baos :encoding "utf-8")]
       (with-open [rdr (reader file-corpus :encoding "utf-8")]

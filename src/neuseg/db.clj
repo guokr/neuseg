@@ -76,3 +76,23 @@
 (def trizero  (get-vector "   "))
 (def quadzero (get-vector "    "))
 
+(defn neighbors [radius elem-fill coll]
+  (let [window (+ 1 (* 2 radius))
+        head   (repeat radius elem-fill)
+        tail   (repeat radius elem-fill)
+        merged (concat head coll tail)]
+    (partition window 1 merged)))
+
+(defn- mdot [vecs]
+  (let [mid 4
+        mid-vec (nth vecs mid)]
+    (map (partial dot mid-vec) (concat (take mid vecs) (drop (inc mid) vecs)))))
+
+(defn- zip [& colls]
+  (map flatten (partition (count colls) (apply interleave colls))))
+
+(defn vectorize [text]
+  (zip (map mdot (neighbors 4 unizero  (map get-vector (iterator-seq (NGram/unigram text)))))
+                            (map mdot (neighbors 4 bizero   (map get-vector (iterator-seq (NGram/bigram text)))))
+                            (map mdot (neighbors 4 trizero  (map get-vector (iterator-seq (NGram/trigram text)))))
+                            (map mdot (neighbors 4 quadzero (map get-vector (iterator-seq (NGram/quadgram text)))))))
