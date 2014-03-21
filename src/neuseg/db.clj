@@ -84,12 +84,12 @@
         merged (concat head coll tail)]
     (partition window 1 merged)))
 
-(defn- mdot [vecs]
+(defn mdot [vecs]
   (let [mid 4
         mid-vec (nth vecs mid)]
     (map (partial dot mid-vec) (concat (take mid vecs) (drop (inc mid) vecs)))))
 
-(defn- zip [& colls]
+(defn zip [& colls]
   (map flatten (partition (count colls) (apply interleave colls))))
 
 (defn vectorize [text]
