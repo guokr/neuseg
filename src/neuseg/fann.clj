@@ -96,6 +96,6 @@
 
 (defn mk-invoke-fn [fann out-dim]
   (fn [input]
-    (vec (.getDoubleArray (-run fann (double-array input)) 0 out-dim))))
+    (vec (.getFloatArray (-run fann (float-array input)) 0 out-dim))))
 
 
