@@ -94,6 +94,6 @@
 
 (defn vectorize [text]
   (zip (map mdot (neighbors 4 unizero  (map get-vector (iterator-seq (NGram/unigram text)))))
-                            (map mdot (neighbors 4 bizero   (map get-vector (iterator-seq (NGram/bigram text)))))
-                            (map mdot (neighbors 4 trizero  (map get-vector (iterator-seq (NGram/trigram text)))))
-                            (map mdot (neighbors 4 quadzero (map get-vector (iterator-seq (NGram/quadgram text)))))))
+       (map mdot (neighbors 4 bizero   (map get-vector (iterator-seq (NGram/bigram text)))))
+       (map mdot (neighbors 4 trizero  (map get-vector (iterator-seq (NGram/trigram text)))))
+       (map mdot (neighbors 4 quadzero (map get-vector (iterator-seq (NGram/quadgram text)))))))
