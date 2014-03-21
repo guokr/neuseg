@@ -2,7 +2,7 @@
   (:use [clj-tuple]
         [clojure.core.matrix :only [set-current-implementation
                                     new-matrix set-row! get-row
-                                    zero-vector normalise]]))
+                                    dot zero-vector normalise]]))
 
 (set-current-implementation :vectorz)
 

@@ -6,5 +6,14 @@
 
 (def tagging (mk-invoke-fn nn 2))
 
+(defn untagging [tag ch]
+  (if (>= (first tag)  0)
+    (if (>= (second tag)  0)
+      (str " " ch " ")
+      (str " " ch))
+    (if (>= (second tag)  0)
+      (str ch " ")
+      (str ch))))
+
 (defn seg [text]
-  (zip (map #(second (tagging %)) (vectorize text)) (vec text))
+  (map untagging (zip (map tagging (vectorize text)) (vec text)))
