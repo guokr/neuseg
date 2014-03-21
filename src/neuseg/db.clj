@@ -2,7 +2,8 @@
   (:use [clj-tuple]
         [clojure.core.matrix :only [set-current-implementation
                                     new-matrix set-row! get-row
-                                    dot zero-vector normalise]]))
+                                    dot zero-vector normalise]])
+  (:import [com.guokr.neuseg.util NGram]))
 
 (set-current-implementation :vectorz)
 
