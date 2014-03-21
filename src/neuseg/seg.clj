@@ -4,7 +4,7 @@
 
 (def nn (fann/loadnn "data/models/tagging.nn"))
 
-(def tagging (mk-invoke-fn nn 2))
+(def tagging (fann/mk-invoke-fn nn 2))
 
 (defn untagging [tag ch]
   (if (>= (first tag)  0)
