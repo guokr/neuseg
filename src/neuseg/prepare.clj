@@ -24,12 +24,12 @@
           (recur (rest raw) (nthrest sgd 2) (conj ret 1 1)))))))
 
 (defn gen-cases [text]
-  (clojure.string/join "\n" 
-    (map format-case (zip (map mdot (neighbors 4 unizero  (map get-vector (iterator-seq (NGram/unigram text)))))
-                          (map mdot (neighbors 4 bizero   (map get-vector (iterator-seq (NGram/bigram text)))))
-                          (map mdot (neighbors 4 trizero  (map get-vector (iterator-seq (NGram/trigram text)))))
-                          (map mdot (neighbors 4 quadzero (map get-vector (iterator-seq (NGram/quadgram text))))))
-                          (partition 2 (tagging text)))))
+  (str (clojure.string/join "\n" 
+         (map format-case (zip (map mdot (neighbors 4 unizero  (map get-vector (iterator-seq (NGram/unigram text)))))
+                               (map mdot (neighbors 4 bizero   (map get-vector (iterator-seq (NGram/bigram text)))))
+                               (map mdot (neighbors 4 trizero  (map get-vector (iterator-seq (NGram/trigram text)))))
+                               (map mdot (neighbors 4 quadzero (map get-vector (iterator-seq (NGram/quadgram text))))))
+                               (partition 2 (tagging text)))) "\n"))
 
 (def counter (atom 0))
 
