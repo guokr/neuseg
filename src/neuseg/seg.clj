@@ -8,13 +8,10 @@
 
 (defn untagging [triple]
   (let [[hd tl ch] triple]
-    (if (>= hd  0)
-      (if (>= tl  0)
-        (str " " ch " ")
-        (str " " ch))
-      (if (>= tl  0)
-        (str ch " ")
-        (str ch)))))
+    (if (>= tl  0)
+      (str ch " ")
+      (str ch))))
 
 (defn seg [text]
-  (map untagging (zip (map tagging (vectorize text)) (vec text))))
+  (clojure.string/join ""
+    (map untagging (zip (map tagging (vectorize text)) (vec text)))))
