@@ -11,7 +11,7 @@
 (defn- clean [text]
   (clojure.string/replace text #"(\s|\u00a0)+" " "))
 
-(defn tagging [text]
+(defn tagging-train [text]
   (let [seged (seg text)]
     (loop [raw text
            sgd seged
@@ -29,7 +29,7 @@
                                (map mdot (neighbors 4 bizero   (map get-vector (iterator-seq (NGram/bigram text)))))
                                (map mdot (neighbors 4 trizero  (map get-vector (iterator-seq (NGram/trigram text)))))
                                (map mdot (neighbors 4 quadzero (map get-vector (iterator-seq (NGram/quadgram text))))))
-                               (partition 2 (tagging text)))) "\n"))
+                               (partition 2 (tagging-train text)))) "\n"))
 
 (def counter (atom 0))
 
