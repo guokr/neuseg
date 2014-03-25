@@ -43,7 +43,7 @@
           (.write wrtr (gen-cases cline))))))
   (with-open [wrtr (writer file-output :encoding "utf-8")]
     (.write wrtr (str @counter " 32 2\n"))
-    (with-open [rdr (reader (str file-output "-header") :encoding "utf-8")]
+    (with-open [rdr (reader (str file-output "-body") :encoding "utf-8")]
       (doseq [line (line-seq rdr)]
         (.write wrtr (str line "/n")))))
   (delete-file (str file-output "-body")))
