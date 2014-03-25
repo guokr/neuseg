@@ -6,7 +6,7 @@
         train-data (fann/load-train-data "data/trains/train")
         test-data  (fann/load-train-data "data/trains/tests")]
     (println "training...")
-    (fann/train nn train-data 100000 1 0.02)
+    (fann/train nn train-data 10000 1 0.04)
     (println "testing...")
     (println "error = " (fann/testnn nn test-data))
     (fann/save nn "data/models/tagging.nn")))

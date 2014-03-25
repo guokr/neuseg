@@ -35,16 +35,18 @@
 
 (defn gen-train [file-corpus file-output]
   (reset! counter 0)
-  (let [baos (java.io.ByteArrayOutputStream.)]
-    (with-open [wrtr (writer baos :encoding "utf-8")]
-      (with-open [rdr (reader file-corpus :encoding "utf-8")]
-        (doseq [line (line-seq rdr)]
-          (let [cline (clean line)]
-            (swap! counter + (count cline))
-            (.write wrtr (gen-cases cline))))))
-    (with-open [wrtr (writer file-output  :encoding "utf-8")]
-        (.write wrtr (str @counter " 32 2\n"))
-          (.write wrtr (.toString baos "utf-8")))))
+  (with-open [wrtr (writer (str file-output "-body") :encoding "utf-8")]
+    (with-open [rdr (reader file-corpus :encoding "utf-8")]
+      (doseq [line (line-seq rdr)]
+        (let [cline (clean line)]
+          (swap! counter + (count cline))
+          (.write wrtr (gen-cases cline))))))
+  (with-open [wrtr (writer file-output :encoding "utf-8")]
+    (.write wrtr (str @counter " 32 2\n"))
+    (with-open [rdr (reader (str file-output "-header") :encoding "utf-8")]
+      (doseq [line (line-seq rdr)]
+        (.write wrtr (str line "/n")))))
+  (delete-file (str file-output "-body")))
 
 (defn prepare []
   (gen-train "data/corpus/corpus" "data/trains/train")
