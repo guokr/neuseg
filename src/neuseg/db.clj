@@ -47,10 +47,10 @@
                             (iterate inc 0)))))
           vecmodel)))
 
-(def unigram  (load-db "unigram"))
-(def bigram   (load-db "bigram"))
-(def trigram  (load-db "trigram"))
-(def quadgram (load-db "quadgram"))
+(def unigram  (future (load-db "unigram")))
+(def bigram   (future (load-db "bigram")))
+(def trigram  (future (load-db "trigram")))
+(def quadgram (future (load-db "quadgram")))
 
 (def ngrams { "unigram" unigram
               "bigram" bigram
@@ -60,7 +60,7 @@
 (defn- retrieve-vector [name s]
   (let [idx (get @(get indexes name) s)
         dim @(get dimensions name)
-        ngram (get ngrams name)]
+        ngram @(get ngrams name)]
     (if idx (get-row ngram idx) (zero-vector dim))))
 
 (defn get-vector [s]
@@ -72,10 +72,10 @@
       4 (retrieve-vector "quadgram" wd)
       (zero-vector 0))))
 
-(def unizero  (get-vector " "))
-(def bizero   (get-vector "  "))
-(def trizero  (get-vector "   "))
-(def quadzero (get-vector "    "))
+(defn unizero [] (get-vector " "))
+(defn bizero [] (get-vector "  "))
+(defn trizero [] (get-vector "   "))
+(defn quadzero [] (get-vector "    "))
 
 (defn neighbors [radius elem-fill coll]
   (let [window (+ 1 (* 2 radius))

@@ -25,30 +25,41 @@
 
 (defn gen-cases [text]
   (str (clojure.string/join "\n" 
-         (map format-case (zip (map mdot (neighbors 4 unizero  (map get-vector (iterator-seq (NGram/unigram text)))))
-                               (map mdot (neighbors 4 bizero   (map get-vector (iterator-seq (NGram/bigram text)))))
-                               (map mdot (neighbors 4 trizero  (map get-vector (iterator-seq (NGram/trigram text)))))
-                               (map mdot (neighbors 4 quadzero (map get-vector (iterator-seq (NGram/quadgram text))))))
+         (map format-case (zip (map mdot (neighbors 4 (unizero)  (map get-vector (iterator-seq (NGram/unigram text)))))
+                               (map mdot (neighbors 4 (bizero)   (map get-vector (iterator-seq (NGram/bigram text)))))
+                               (map mdot (neighbors 4 (trizero)  (map get-vector (iterator-seq (NGram/trigram text)))))
+                               (map mdot (neighbors 4 (quadzero) (map get-vector (iterator-seq (NGram/quadgram text))))))
+                               (partition 2 (tagging-train text)))) "\n"))
+
+(defn gen-dcases [text]
+  (str (clojure.string/join "\n" 
+         (map format-case (map (partial clojure.string/join " ")
+                               (neighbors 3 (unizero) (map get-vector 
+                                                           (iterator-seq (NGram/unigram text)))))
                                (partition 2 (tagging-train text)))) "\n"))
 
 (def counter (atom 0))
 
-(defn gen-train [file-corpus file-output]
+(defn gen-train [file-corpus file-output gen-fun idim odim]
   (reset! counter 0)
   (with-open [wrtr (writer (str file-output "-body") :encoding "utf-8")]
     (with-open [rdr (reader file-corpus :encoding "utf-8")]
       (doseq [line (line-seq rdr)]
         (let [cline (clean line)]
           (swap! counter + (count cline))
-          (.write wrtr (gen-cases cline))))))
+          (.write wrtr (gen-fun cline))))))
   (with-open [wrtr (writer file-output :encoding "utf-8")]
-    (.write wrtr (str @counter " 32 2\n"))
+    (.write wrtr (str @counter " " idim " " odim "\n"))
     (with-open [rdr (reader (str file-output "-body") :encoding "utf-8")]
       (doseq [line (line-seq rdr)]
         (.write wrtr (str line "/n")))))
   (delete-file (str file-output "-body")))
 
 (defn prepare []
-  (gen-train "data/corpus/corpus" "data/trains/train")
-  (gen-train "data/corpus/tests" "data/trains/tests"))
+  (gen-train "data/corpus/corpus" "data/trains/train" gen-cases 32 2)
+  (gen-train "data/corpus/tests" "data/trains/tests" gen-cases 32 2))
+
+(defn dprepare []
+  (gen-train "data/corpus/corpus" "data/trains/dtrain" gen-dcases 112 2)
+  (gen-train "data/corpus/tests" "data/trains/dtests" gen-dcases 112 2))
 
