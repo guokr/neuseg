@@ -37,7 +37,7 @@
 
 (defn predict [nn input dim]
   (if (> (count input) dim)
-    (map #(- (* 2 (Math/round %)) 1)) (.pridict nn (vectorize input dim))
+    (map #(- (* 2 (Math/round %)) 1) (.pridict nn (vectorize input dim)))
     [Double/NaN Double/NaN]))
 
 (defn- testfun [nn idim odim]
