@@ -17,9 +17,11 @@
 (defn pretrain [nn k lr train-file-name]
   (with-open [rdr (clojure.java.io/reader train-file-name)]
     (let [data (line-seq rdr)
-          [total idm odm] (clojure.string/split (first data) #" ")]
-      (doall (map #(.pretrain nn k lr (vectorize % (Integer. idm)))
-                  (flatten (partition 1 2 (rest data))))))))
+          [total idm odm] (clojure.string/split (first data) #" ")
+          idm (Integer. idm)]
+      (doseq [line (flatten (partition 1 2 (rest data)))]
+        (if (> (count line) idm)
+          (.pretrain nn k lr (vectorize line idm)))))))
 
 (defn finetune [nn lr train-file-name]
   (with-open [rdr (clojure.java.io/reader train-file-name)]
@@ -27,11 +29,16 @@
           [total idm odm] (clojure.string/split (first data) #" ")
           idm (Integer. idm)
           odm (Integer. odm)]
-      (doall (map #(.finetune nn lr (vectorize (first %) idm) (vectorize (second %) odm))
-                  (partition 2 (rest data)))))))
+      (doseq [dlines (partition 2 (rest data))]
+        (let [lndata (first dlines)
+              lntest (second dlines)]
+          (if (and (> (count lndata) idm) (> (count lntest) odm))
+            (.finetune nn lr (vectorize lndata idm) (vectorize lntest odm))))))))
 
 (defn predict [nn input dim]
-  (map #(- (* 2 (Math/round %)) 1)) (.pridict nn (vectorize input dim)))
+  (if (> (count input) dim)
+    (map #(- (* 2 (Math/round %)) 1)) (.pridict nn (vectorize input dim))
+    [Double/NaN Double/NaN]))
 
 (defn- testfun [nn idim odim]
   (fn [input output]
