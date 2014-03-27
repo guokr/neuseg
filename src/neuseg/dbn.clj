@@ -8,7 +8,7 @@
   (/ (+ 1 val) 2))
 
 (defn- vectorize [line dim]
-  (new-vector (map #(normalize (.Double %)) (clojure.string/split line #" ")) dim))
+  (new-vector (map #(normalize (Double. %)) (clojure.string/split line #" ")) dim))
 
 (defn create [layers]
   (DBN. (int-array layers)))
@@ -17,14 +17,16 @@
   (with-open [rdr (clojure.java.io/reader train-file-name)]
     (let [data (line-seq rdr)
           [total idm odm] (clojure.string/split (first data) #" ")]
-      (doall (map #(.pretrain nn k lr (vectorize % idm))
+      (doall (map #(.pretrain nn k lr (vectorize % (Integer. idm)))
                   (flatten (partition 1 2 (rest (line-seq rdr)))))))))
 
 (defn finetune [nn lr train-file-name]
   (with-open [rdr (clojure.java.io/reader train-file-name)]
     (let [data (line-seq rdr)
-          [total idm odm] (clojure.string/split (first data) #" ")]
-      (doall (map #(.finetune lr (vectorize (first %) idm) (vectorize (second %) odm))
+          [total idm odm] (clojure.string/split (first data) #" ")
+          idm (Integer. idm)
+          odm (Integer. odm)]
+      (doall (map #(.finetune nn lr (vectorize (first %) idm) (vectorize (second %) odm))
                   (partition 2 (rest (line-seq rdr))))))))
 
 (defn predict [nn input dim]
@@ -38,6 +40,8 @@
   (with-open [rdr (clojure.java.io/reader test-file-name)]
     (let [data (line-seq rdr)
           [total idm odm] (clojure.string/split (first data) #" ")
+          idm (Integer. idm)
+          odm (Integer. odm)
           tfn (testfun nn idm odm)]
       (/ (reduce + (map #(tfn (vectorize (first %) idm) (vectorize (second %) odm))
                         (partition 2 (rest (line-seq rdr))))) (Double. total)))))
