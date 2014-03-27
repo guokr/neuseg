@@ -1,6 +1,7 @@
 (ns neuseg.dbn
   (:use [clojure.core.matrix :only [set-current-implementation new-vector]])
-  (:import (com.guokr.dbn DBN)))
+  (:import (com.guokr.dbn DBN)
+           (mikera.vectorz Vectorz)))
 
 (set-current-implementation :vectorz)
 
@@ -8,7 +9,7 @@
   (/ (+ 1 val) 2))
 
 (defn- vectorize [line dim]
-  (new-vector (map #(normalize (Double. %)) (clojure.string/split line #" ")) dim))
+  (Vectorz/create (double-array (map #(normalize (Double. %)) (clojure.string/split line #" ")))))
 
 (defn create [layers]
   (DBN. (int-array layers)))
