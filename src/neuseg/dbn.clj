@@ -19,7 +19,7 @@
     (let [data (line-seq rdr)
           [total idm odm] (clojure.string/split (first data) #" ")]
       (doall (map #(.pretrain nn k lr (vectorize % (Integer. idm)))
-                  (flatten (partition 1 2 (rest (line-seq rdr)))))))))
+                  (flatten (partition 1 2 (rest data))))))))
 
 (defn finetune [nn lr train-file-name]
   (with-open [rdr (clojure.java.io/reader train-file-name)]
@@ -28,7 +28,7 @@
           idm (Integer. idm)
           odm (Integer. odm)]
       (doall (map #(.finetune nn lr (vectorize (first %) idm) (vectorize (second %) odm))
-                  (partition 2 (rest (line-seq rdr))))))))
+                  (partition 2 (rest data)))))))
 
 (defn predict [nn input dim]
   (map #(- (* 2 (Math/round %)) 1)) (.pridict nn (vectorize input dim)))
@@ -45,6 +45,6 @@
           odm (Integer. odm)
           tfn (testfun nn idm odm)]
       (/ (reduce + (map #(tfn (vectorize (first %) idm) (vectorize (second %) odm))
-                        (partition 2 (rest (line-seq rdr))))) (Double. total)))))
+                        (partition 2 (rest data)))) (Double. total)))))
 
 (defn save [nn])
