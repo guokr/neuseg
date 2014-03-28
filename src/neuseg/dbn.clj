@@ -12,6 +12,9 @@
 (defn- vectorize [line dim]
   (Vectorz/create (double-array (map #(normalize (Double. %)) (clojure.string/split line #" ")))))
 
+(defn- int-seq [line dim]
+  (map #(Integer. %) (clojure.string/split line #" ")))
+
 (defn create [layers]
   (DBN. (int-array layers)))
 
@@ -36,23 +39,20 @@
           (if (and (> (count lndata) idm) (> (count lntest) odm))
             (.finetune nn lr (vectorize lndata idm) (vectorize lntest odm))))))))
 
-(defn predict [nn input dim]
-  (if (> (dimensionality input) dim)
-    (map #(- (* 2 (Math/round %)) 1) (.pridict nn (vectorize input dim)))
-    [Double/NaN Double/NaN]))
+(defn predict [nn input]
+    (map #(- (* 2 (Math/round %)) 1) (.pridict nn input)))
 
-(defn- testfun [nn idim odim]
+(defn- testfun [nn]
   (fn [input output]
-    (if (= (predict nn input idim) output) 1 0)))
+    (if (= (predict nn input) output) 1 0)))
 
 (defn testnn [nn test-file-name]
   (with-open [rdr (clojure.java.io/reader test-file-name)]
     (let [data (line-seq rdr)
           [total idm odm] (clojure.string/split (first data) #" ")
           idm (Integer. idm)
-          odm (Integer. odm)
-          tfn (testfun nn idm odm)]
-      (/ (reduce + (map #(tfn (vectorize (first %) idm) (vectorize (second %) odm))
+          tfn (testfun nn)]
+      (/ (reduce + (map #(tfn (vectorize (first %) idm) (int-seq (second %)))
                         (partition 2 (rest data)))) (Double. total)))))
 
 (defn save [nn])
