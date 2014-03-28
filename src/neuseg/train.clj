@@ -6,6 +6,12 @@
     (println "pretrain...")
     (time (dbn/pretrain nn 1 0.01 "data/trains/train"))
     (println "finetune...")
-    (time (dbn/finetune nn 0.1 "data/trains/train"))
+    (time
+      (do
+        (dbn/finetune nn 0.01 "data/trains/train")
+        (dbn/finetune nn 0.01 "data/trains/train")
+        (dbn/finetune nn 0.01 "data/trains/train")
+        (dbn/finetune nn 0.01 "data/trains/train")
+        (dbn/finetune nn 0.01 "data/trains/train")))
     (println "testing...")
     (time (println "success = " (dbn/testnn nn "data/trains/tests")))))

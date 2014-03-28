@@ -52,7 +52,7 @@ public class RBM {
     public void vsample_under_h(AVector vsample, AVector vmean, AVector hsample) {
         for (int i = 0; i < vnum + 1; i++) {
             vmean.set(i, down(hsample, weights.getRow(i)));
-            vsample.set(i, binomial(1, vmean.get(i)));
+            vsample.set(i, vmean.get(i));
         }
         vmean.set(0, 1);
         vsample.set(0, 1);
