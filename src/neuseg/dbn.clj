@@ -1,5 +1,6 @@
 (ns neuseg.dbn
-  (:use [clojure.core.matrix :only [set-current-implementation new-vector]])
+  (:use [clojure.core.matrix :only [set-current-implementation
+                                    new-vector dimensionality]])
   (:import (com.guokr.dbn DBN)
            (mikera.vectorz Vectorz)))
 
@@ -36,7 +37,7 @@
             (.finetune nn lr (vectorize lndata idm) (vectorize lntest odm))))))))
 
 (defn predict [nn input dim]
-  (if (> (count input) dim)
+  (if (> (dimensionality input) dim)
     (map #(- (* 2 (Math/round %)) 1) (.pridict nn (vectorize input dim)))
     [Double/NaN Double/NaN]))
 
