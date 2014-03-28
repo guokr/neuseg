@@ -40,7 +40,7 @@
             (.finetune nn lr (vectorize lndata idm) (vectorize lntest odm))))))))
 
 (defn predict [nn input]
-    (map #(- (* 2 (Math/round %)) 1) (.pridict nn input)))
+    (map #(- (* 2 (Math/round %)) 1) (.predict nn input)))
 
 (defn- testfun [nn]
   (fn [input output]
