@@ -12,7 +12,7 @@
 (defn- vectorize [line dim]
   (Vectorz/create (double-array (map #(normalize (Double. %)) (clojure.string/split line #" ")))))
 
-(defn- int-seq [line dim]
+(defn- int-seq [line]
   (map #(Integer. %) (clojure.string/split line #" ")))
 
 (defn create [layers]
