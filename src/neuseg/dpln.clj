@@ -19,7 +19,7 @@
   (doto (CDBN$Builder.)
     (.numberOfInputs (first layers))
     (.numberOfOutPuts (last layers))
-    (.hiddenLayerSizes (int-array (pop (rest layers))))
+    (.hiddenLayerSizes (int-array (rest (pop layers))))
     (.useRegularization false)
     (.withRng (MersenneTwister. 123))
     (.withL2 0.1)
