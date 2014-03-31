@@ -1,7 +1,7 @@
-(ns neuseg.dpln)
+(ns neuseg.dpln
   (:import (org.apache.commons.math3.random MersenneTwister)
-           (org.deeplearning4j.dbn CBDN)
-           (org.jblas DoubleMatrix))
+           (org.deeplearning4j.dbn CDBN$Builder)
+           (org.jblas DoubleMatrix)))
 
 (defn- normalize [val]
   (/ (+ 1 val) 2))
@@ -13,10 +13,10 @@
   (map #(normalize (Integer. %)) (clojure.string/split line #" ")))
 
 (defn- int-seq [line]
-  (map (Integer. %) (clojure.string/split line #" ")))
+  (map #(Integer. %) (clojure.string/split line #" ")))
 
 (defn create [layers]
-  (doto (CDBN/Builder)
+  (doto (CDBN$Builder.)
     (.numberOfInputs (first layers))
     (.numberOfOutPuts (last layers))
     (.hiddenLayerSizes (int-array (pop (rest layers))))
@@ -24,7 +24,7 @@
     (.withRng (MersenneTwister. 123))
     (.withL2 0.1)
     (.renderWeights 1000)
-    (build)))
+    (.build)))
 
 (defn pretrain [nn k lr epochs train-file-name]
   (with-open [rdr (clojure.java.io/reader train-file-name)]
@@ -46,8 +46,8 @@
 
 (defn predict [nn input]
   (let [dim (count input)
-        test-data (DoubleMatrix. 1 dim (double-array input))])
-    (map #(- (* 2 (Math/round %)) 1) (vec (.toArray (.predict nn test-data)))))
+        test-data (DoubleMatrix. 1 dim (double-array input))]
+    (map #(- (* 2 (Math/round %)) 1) (vec (.toArray (.predict nn test-data))))))
 
 (defn- testfun [nn]
   (fn [input output]
