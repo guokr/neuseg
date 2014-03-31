@@ -40,6 +40,7 @@
   (with-open [rdr (clojure.java.io/reader train-file-name)]
     (let [data (line-seq rdr)
           [total idm odm] (clojure.string/split (first data) #" ")
+          total (Integer. total)
           idm (Integer. idm)
           odm (Integer. odm)
           train-label (double-array (flatten (map labelize (flatten (partition 1 2 (nthrest data 2))))))]
