@@ -15,6 +15,7 @@
                    [net.mikera/vectorz-clj "0.20.0"]
                    [net.n01se/clojure-jna "1.0.0"]
                    [com.guokr/clj-cn-nlp "0.2.0"]
+                   [org.deeplearning4j/deeplearning4j-core "0.0.3"]
                    [junit "4.0" :scope "test"]]
 
     :java-source-paths ["java"]
