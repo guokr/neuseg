@@ -16,15 +16,15 @@
   (map #(Integer. %) (clojure.string/split line #" ")))
 
 (defn create [layers]
-  (doto (CDBN$Builder.)
-    (.numberOfInputs (first layers))
-    (.numberOfOutPuts (last layers))
-    (.hiddenLayerSizes (int-array (rest (pop layers))))
-    (.useRegularization false)
-    (.withRng (MersenneTwister. 123))
-    (.withL2 0.1)
-    (.renderWeights 1000)
-    (.build)))
+ (let [builder (doto (CDBN$Builder.)
+                 (.numberOfInputs (first layers))
+                 (.numberOfOutPuts (last layers))
+                 (.hiddenLayerSizes (int-array (rest (pop layers))))
+                 (.useRegularization false)
+                 (.withRng (MersenneTwister. (.getTime (.Date))))
+                 (.withL2 0.1)
+                 (.renderWeights 1000))]
+    (.build builder)))
 
 (defn pretrain [nn k lr epochs train-file-name]
   (with-open [rdr (clojure.java.io/reader train-file-name)]
