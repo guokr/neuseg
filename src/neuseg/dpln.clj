@@ -1,5 +1,6 @@
 (ns neuseg.dpln
-  (:import (org.apache.commons.math3.random MersenneTwister)
+  (:import (java.util Date)
+           (org.apache.commons.math3.random MersenneTwister)
            (org.deeplearning4j.dbn CDBN$Builder)
            (org.jblas DoubleMatrix)))
 
@@ -21,7 +22,7 @@
                  (.numberOfOutPuts (last layers))
                  (.hiddenLayerSizes (int-array (rest (pop layers))))
                  (.useRegularization false)
-                 (.withRng (MersenneTwister. (.getTime (.Date))))
+                 (.withRng (MersenneTwister. (.getTime (Date.))))
                  (.withL2 0.1)
                  (.renderWeights 1000))]
     (.build builder)))
