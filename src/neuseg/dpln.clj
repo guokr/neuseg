@@ -23,8 +23,7 @@
                  (.hiddenLayerSizes (int-array (rest (pop layers))))
                  (.useRegularization false)
                  (.withRng (MersenneTwister. (.getTime (Date.))))
-                 (.withL2 0.1)
-                 (.renderWeights 1000))]
+                 (.withL2 0.1))]
     (.build builder)))
 
 (defn pretrain [nn k lr epochs train-file-name]
