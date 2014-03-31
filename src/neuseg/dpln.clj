@@ -1,15 +1,19 @@
 (ns neuseg.dpln)
   (:import (org.apache.commons.math3.random MersenneTwister)
-           (org.deeplearning4j.dbn CBDN))
+           (org.deeplearning4j.dbn CBDN)
+           (org.jblas DoubleMatrix))
 
 (defn- normalize [val]
   (/ (+ 1 val) 2))
 
-(defn- vectorize [line dim]
-  (Vectorz/create (double-array (map #(normalize (Double. %)) (clojure.string/split line #" ")))))
+(defn- vectorize [line]
+  (map #(normalize (Double. %)) (clojure.string/split line #" ")))
+
+(defn- labelize [line]
+  (map #(normalize (Integer. %)) (clojure.string/split line #" ")))
 
 (defn- int-seq [line]
-  (map #(Integer. %) (clojure.string/split line #" ")))
+  (map (Integer. %) (clojure.string/split line #" ")))
 
 (defn create [layers]
   (doto (CDBN/Builder)
@@ -22,29 +26,28 @@
     (.renderWeights 1000)
     (build)))
 
-(defn pretrain [nn k lr train-file-name]
+(defn pretrain [nn k lr epochs train-file-name]
   (with-open [rdr (clojure.java.io/reader train-file-name)]
     (let [data (line-seq rdr)
           [total idm odm] (clojure.string/split (first data) #" ")
-          idm (Integer. idm)]
-      (doseq [line (flatten (partition 1 2 (rest data)))]
-        (if (> (count line) idm)
-          (.pretrain nn k lr (vectorize line idm)))))))
+          total (Integer. total)
+          idm (Integer. idm)
+          train-data (double-array (flatten (map vectorize (flatten (partition 1 2 (rest data))))))]
+      (.pretrain nn (DoubleMatrix. total idm train-data) k lr epochs))))
 
-(defn finetune [nn lr train-file-name]
+(defn finetune [nn lr epochs train-file-name]
   (with-open [rdr (clojure.java.io/reader train-file-name)]
     (let [data (line-seq rdr)
           [total idm odm] (clojure.string/split (first data) #" ")
           idm (Integer. idm)
-          odm (Integer. odm)]
-      (doseq [dlines (partition 2 (rest data))]
-        (let [lndata (first dlines)
-              lntest (second dlines)]
-          (if (and (> (count lndata) idm) (> (count lntest) odm))
-            (.finetune nn lr (vectorize lndata idm) (vectorize lntest odm))))))))
+          odm (Integer. odm)
+          train-label (double-array (flatten (map labelize (flatten (partition 1 2 (nthrest data 2))))))]
+    (.finetune nn (DoubleMatrix. total idm train-label) lr epochs))))
 
 (defn predict [nn input]
-    (map #(- (* 2 (Math/round %)) 1) (.predict nn input)))
+  (let [dim (count input)
+        test-data (DoubleMatrix. 1 dim (double-array input))])
+    (map #(- (* 2 (Math/round %)) 1) (vec (.toArray (.predict nn test-data)))))
 
 (defn- testfun [nn]
   (fn [input output]
@@ -56,7 +59,7 @@
           [total idm odm] (clojure.string/split (first data) #" ")
           idm (Integer. idm)
           tfn (testfun nn)]
-      (/ (reduce + (map #(tfn (vectorize (first %) idm) (int-seq (second %)))
+      (/ (reduce + (map #(tfn (vectorize (first %)) (int-seq (second %)))
                         (partition 2 (rest data)))) (Double. total)))))
 
 (defn save [nn])
