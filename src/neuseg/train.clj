@@ -25,5 +25,5 @@
     (println "finetune...")
     (time (dpln/finetune nn 0.01 100 "data/trains/train"))
     (println "testing...")
-    (time (println "success = " (dbn/testnn nn "data/trains/tests")))))
+    (time (println "success = " (dpln/testnn nn "data/trains/tests")))))
 

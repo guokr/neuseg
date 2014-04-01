@@ -16,6 +16,12 @@
 (defn- int-seq [line]
   (map #(Integer. %) (clojure.string/split line #" ")))
 
+(defn- to-matrix [rows cols row-based-data]
+  (.transpose (DoubleMatrix. cols rows (double-array row-based-data))))
+
+(defn- from-matrix [m]
+  (vec (.toArray (.transpose m))))
+
 (defn create [layers]
  (let [builder (doto (CDBN$Builder.)
                  (.numberOfInputs (first layers))
@@ -32,8 +38,8 @@
           [total idm odm] (clojure.string/split (first data) #" ")
           total (Integer. total)
           idm (Integer. idm)
-          train-data (double-array (flatten (map vectorize (flatten (partition 1 2 (rest data))))))]
-      (.pretrain nn (DoubleMatrix. total idm train-data) k lr epochs))))
+          train-data (flatten (map vectorize (flatten (partition 1 2 (rest data)))))]
+      (.pretrain nn (to-matrix total idm train-data) k lr epochs))))
 
 (defn finetune [nn lr epochs train-file-name]
   (with-open [rdr (clojure.java.io/reader train-file-name)]
@@ -42,13 +48,13 @@
           total (Integer. total)
           idm (Integer. idm)
           odm (Integer. odm)
-          train-label (double-array (flatten (map labelize (flatten (partition 1 2 (nthrest data 2))))))]
-    (.finetune nn (DoubleMatrix. total odm train-label) lr epochs))))
+          train-label (flatten (map labelize (flatten (partition 1 2 (nthrest data 2)))))]
+    (.finetune nn (to-matrix total odm train-label) lr epochs))))
 
 (defn predict [nn input]
   (let [dim (count input)
-        test-data (DoubleMatrix. 1 dim (double-array input))]
-    (map #(- (* 2 (Math/round %)) 1) (vec (.toArray (.predict nn test-data))))))
+        test-data (to-matrix 1 dim input)]
+    (map #(- (* 2 (Math/round %)) 1) (from-matrix (.predict nn test-data)))))
 
 (defn- testfun [nn]
   (fn [input output]
