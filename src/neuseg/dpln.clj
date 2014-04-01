@@ -43,7 +43,7 @@
           idm (Integer. idm)
           odm (Integer. odm)
           train-label (double-array (flatten (map labelize (flatten (partition 1 2 (nthrest data 2))))))]
-    (.finetune nn (DoubleMatrix. total idm train-label) lr epochs))))
+    (.finetune nn (DoubleMatrix. total odm train-label) lr epochs))))
 
 (defn predict [nn input]
   (let [dim (count input)
