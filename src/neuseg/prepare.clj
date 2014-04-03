@@ -33,7 +33,7 @@
 
 (defn gen-dcases [text]
   (str (clojure.string/join "\n" 
-         (map format-case (map (partial clojure.string/join " ")
+         (map format-case (map #(flatten (map seq %))
                                (neighbors 3 (unizero) (map get-vector 
                                                            (iterator-seq (NGram/unigram text)))))
                                (partition 2 (tagging-train text)))) "\n"))
